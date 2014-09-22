@@ -1,0 +1,395 @@
+<?xml version='1.0' encoding='gb2312'?>
+<!-- 
+	这是应用配置文件. 这个文件的名称应被写在servlet的初始化参数中. 例如, 在web.xml文件中,
+	<servlet>
+	<servlet-name>RequestHandler</servlet-name>
+	<servlet-class>com.hd123.rumba.request.RequestHandler</servlet-class>
+	<init-param>
+	<param-name>configurations</param-name>
+	<param-value>/rumba.xml;/myrumba.xml</param-value>
+	</init-param>
+	<load-on-startup>99</load-on-startup>
+	</servlet>
+	
+	如果不通过tomcat初始化, 则使用
+	new com.hd123.rumba.runtime.Configuration().config("/rumba.xml;/myrumba.xml");
+	初始化.
+	
+	在以下描述中, 具有相同name属性值的property, custom, div, wsdd结点, 其内容将按配置文件次序, 后面的覆盖前面的.
+	在合并后的配置中, div结点的内容还会被提升一级
+	
+	hibernates.querySource和hibernates.queryResult中的可以包含以下指示, 使之不连接查询源和查询结果数据库:
+	<ignore>true</ignore>
+	这样, 系统在启动时就不会去连接querySource和queryResult. 
+	相应地, 不应去使用查询工具, 或QuerySourceSession, QueryResultSession
+	
+	Assuming a.xml has following contents:
+	<configuration>
+	<property name="p1">ap1</property>
+	<property name="p2">ap2</property>
+	<div name="diva">
+	<property name="d1">ad1</property>
+	<property name="d2">ad2</property>
+	</div>
+	<configuration>
+	
+	b.xml has following contents:
+	<configuration>
+	<property name="p1">bp1</property>
+	<div name="diva">
+	<property name="d3">bd3</property>
+	<property name="d4">bd4</property>
+	</div>
+	<configuration>
+	
+	Combine a.xml and b.xml in the order a.xml, b.xml, 
+	the result would be
+	<configuration>
+	<property name="p1">bp1</property>
+	<property name="p2">ap2</property>
+	<property name="d3">bd3</property>
+	<property name="d4">bd4</property>
+	<configuration>
+-->
+
+<configuration>
+	<hibernates>
+		<business>
+			<!--Database 
+			数据库连接配置。
+			建议：建议将数据库连接配置放在myrumba.xml中。
+			提示：一般情况下需要将相同的配置复制到<configuration><hibernates>中的<querySource>、<queryResult>中。
+			以下为Oracle连接实例：
+			<div name="database">
+				<property name="hibernate.dialect">
+					net.sf.hibernate.dialect.Oracle9Dialect
+				</property>
+				<property name="hibernate.connection.driver_class">
+					oracle.jdbc.driver.OracleDriver
+				</property>
+				<property name="hibernate.connection.url">
+					jdbc:oracle:thin:@taurus2k3e:1521:t2k3e
+				</property>
+				<property name="hibernate.connection.username">
+					rumba
+				</property>
+				<property name="hibernate.connection.password">
+					rumba
+				</property>
+			</div>
+			以下为MSSQL连接实例：
+			<div name="database">
+				<property name="hibernate.dialect">
+					net.sf.hibernate.dialect.SQLServerDialect
+				</property>
+				<property name="hibernate.connection.driver_class">
+					com.microsoft.jdbc.sqlserver.SQLServerDriver
+				</property>
+				<property name="hibernate.connection.url">
+ 					jdbc:microsoft:sqlserver://taurus2k3e2;DatabaseName=hd31;SelectMethod=Cursor 
+				</property>
+				<property name="hibernate.connection.username">
+					sa
+				</property>
+				<property name="hibernate.connection.password">
+				</property>
+			</div>
+			以下为MySQL连接实例：
+			<div name="database">
+				<property name="hibernate.dialect">
+					net.sf.hibernate.dialect.MySQLDialect
+				</property>
+				<property name="hibernate.connection.driver_class">
+					org.gjt.mm.mysql.Driver
+				</property>
+				<property name="hibernate.connection.driver_class">
+					com.mysql.jdbc.Driver
+				</property>
+				<property name="hibernate.connection.url">
+ 					jdbc:mysql:///tango?useUnicode=true&encoding=gb2312&useServerPrepStmts=false 
+				</property>
+				<property name="hibernate.connection.username">
+					root
+				</property>
+				<property name="hibernate.connection.password">
+					myN3wPassw0rd
+				</property>
+			</div>
+			-->
+
+			<div name="connection">
+				<!-- C3P0 connection pool-->
+				<property name="hibernate.c3p0.max_size">2</property>
+				<property name="hibernate.c3p0.max_size">2</property>
+				<property name="hibernate.c3p0.min_size">2</property>
+				<property name="hibernate.c3p0.timeout">5000</property>
+				<property name="hibernate.c3p0.max_statements">
+					100
+				</property>
+				<property name="hibernate.c3p0.idle_test_period">
+					3000
+				</property>
+				<property name="hibernate.c3p0.acquire_increment">
+					2
+				</property>
+				<property name="hibernate.c3p0.validate">
+					false
+				</property>
+
+				<property name="hibernate.proxool.pool_alias">
+					poolbu
+				</property>
+			</div>
+
+			<!--  ORMapping -->
+			<div name="rumba.domain">
+				<mapping resource="com/hd123/rumba/domain/Domain.hbm.xml" />
+			</div>
+			<div name="rumba.log">
+				<mapping resource="com/hd123/rumba/log/Log.hbm.xml" />
+			</div>
+			<div name="rumba.organization">
+				<mapping resource="com/hd123/rumba/organization/Organization.hbm.xml" />
+			</div>
+			<div name="rumba.user">
+				<mapping resource="com/hd123/rumba/user/User.hbm.xml" />
+			</div>
+			<div name="rumba.qt">
+				<mapping resource="com/hd123/rumba/qt/result/qt.hbm.xml" />
+				<mapping resource="com/hd123/rumba/qt/collate/collate.hbm.xml" />
+			</div>
+			<div name="rumba.catalog">
+				<mapping resource="com/hd123/rumba/catalog/Catalog.hbm.xml" />
+			</div>
+			<div name="rumba.Impex">
+		        <mapping resource="com/hd123/rumba/impex/Impex.hbm.xml"/>
+		    </div>	
+		    <div name="rumba.form">
+		        <mapping resource="com/hd123/rumba/form/FormValue.hbm.xml"/>
+		    </div>	
+			<!--mapping resource="com/hd123/core/impex/Impex.hbm.xml"/-->
+			
+		</business>
+
+		<querySource>
+			<div name="database">
+				<!--Database 数据库连接配置，参见<business>中的有关说明 -->
+			</div>
+			<div name="connection">
+				<!-- 缓冲池应支持当没有连接可用时立即返回错误的功能. -->
+				<!-- Apache DBCP connection pool -->
+				<property name="hibernate.connection.provider_class">
+					com.hd123.rumba.patch.net.sf.hibernate.connection.DBCPConnectionProvider
+				</property>
+				<property name="hibernate.dbcp.whenExhaustedAction">0</property>
+				<property name="hibernate.dbcp.maxActive">2</property>
+				<property name="hibernate.dbcp.maxWait">30000</property>
+				<property name="hibernate.dbcp.maxIdle">2</property>
+				<!-- prepared statement cache-->
+				<property name="hibernate.dbcp.ps.maxTotal">20</property>
+				<property name="hibernate.dbcp.ps.maxActive">20</property>
+				<property name="hibernate.dbcp.ps.maxIdle">20</property>
+				<property name="hibernate.dbcp.ps.whenExhaustedAction">2</property>
+				<property name="hibernate.dbcp.ps.maxWait">5000</property>
+				<!-- optional query to validate pooled connections:-->
+				<!--hibernate.dbcp.validationQuery select 1 from dual-->
+				<!--hibernate.dbcp.testOnBorrow true-->
+				<!--hibernate.dbcp.testOnReturn false-->
+				<property name="hibernate.proxool.pool_alias">
+					poolqs
+				</property>
+			</div>
+		</querySource>
+
+		<queryResult>
+			<div name="database">
+				<!--Database 数据库连接配置，参见<business>中的有关说明 -->
+			</div>
+
+			<div name="connection">
+				<!-- Apache DBCP connection pool -->
+				<!-- 缓冲池应支持当没有连接可用时立即返回错误的功能. -->
+				<property name="hibernate.connection.provider_class">
+					com.hd123.rumba.patch.net.sf.hibernate.connection.DBCPConnectionProvider
+				</property>
+				<property name="hibernate.dbcp.whenExhaustedAction">0</property>
+				<property name="hibernate.dbcp.maxActive">2</property>
+				<property name="hibernate.dbcp.maxWait">30000</property>
+				<property name="hibernate.dbcp.maxIdle">2</property>
+				<!-- prepared statement cache-->
+				<property name="hibernate.dbcp.ps.maxTotal">20</property>
+				<property name="hibernate.dbcp.ps.maxActive">20</property>
+				<property name="hibernate.dbcp.ps.maxIdle">20</property>
+				<property name="hibernate.dbcp.ps.whenExhaustedAction">2</property>
+				<property name="hibernate.dbcp.ps.maxWait">5000</property>
+				<!-- optional query to validate pooled connections:-->
+				<!--hibernate.dbcp.validationQuery select 1 from dual-->
+				<!--hibernate.dbcp.testOnBorrow true-->
+				<!--hibernate.dbcp.testOnReturn false-->
+				<property name="hibernate.proxool.pool_alias">
+					poolqr
+				</property>
+			</div>
+		</queryResult>
+	</hibernates>
+
+	<properties class="com.hd123.rumba.request.RequestHandler">
+		<property name="applicationName">RUMBA</property>
+	</properties>
+
+	<properties class="com.hd123.rumba.qt.QTConstants">
+		<!--  查询定义文件主目录. 当使用多个查询服务器时, 这个目录应能被它们共享读写 -->
+		<property name="QDHOME">/rumbaQt</property>
+		<!--  查询结果保留天数 -->
+		<property name="QRLIFE">10</property>
+		<!--  每个用户的最多查询结果数 -->
+		<property name="MAXQUERYRESULTS">10</property>
+		<!--  ORACLE NLS_DATE_FOMRAT -->
+		<property name="QUERY_ORACLE_DATEFORMAT">
+			'YYYY.MM.DD HH24:MI:SS'
+		</property>
+		<property name="LIST_VERBOSE">true</property>
+	</properties>
+
+	<properties class="com.hd123.rumba.request.ActionConstants">
+		<!-- directories -->
+		<property name="APPHOME">/{$apphome}/</property>
+		<property name="ACTIONURL">/{$apphome}/bin/</property>
+		<!-- action handler packages are seperated by ; -->
+		<property name="ACTIONPACKAGE">com.hd123.rumba.action</property>
+		<property name="TEMPLATEURL">/WEB-INF/templates/</property>
+		<!--  template dirs are seperated by ; -->
+		<property name="TEMPLATEDIR">rumba</property>
+		<property name="STATICCONTENTURL">/{$apphome}/static/</property>
+		<property name="DOCCONTENTURL">/{$apphome}/doc/</property>
+		<property name="TEMPIMPORTDIR">/WEB-INF/temp/import</property>
+		<property name="TEMPEXPORTDIR">/static/export</property>
+		<!-- jsp files -->
+		<property name="APPLICATIONFRAME">
+			application/ApplicationFrame.jsp
+		</property>
+		<property name="DIRECT">_direct_</property>
+		<property name="FILETOOLARGE">
+			application/FileTooLarge.jsp
+		</property>
+		<property name="NOACCESS">application/NoAccess.jsp</property>
+		<property name="NOTIMPLEMENTED">
+			application/NotImplemented.jsp
+		</property>
+		<property name="DELETED">application/Deleted.jsp</property>
+	</properties>
+
+	<properties class="com.hd123.rumba.runtime.FormatSettings">
+		<!--  SimpleDateFormat -->
+		<property name="SDFyyyyMM">yyyyMM</property>
+		<property name="SDFyyyyMMdd">yyyyMMdd</property>
+		<property name="SDFyMd">yyyy-MM-dd</property>
+		<property name="SDFyMdHm">yyyy-MM-dd HH:mm</property>
+		<property name="SDFyMdHms">yyyy-MM-dd HH:mm:ss</property>
+
+		<!-- JspLib.format -->
+		<property name="qty">0.###</property>
+		<property name="price">0.00</property>
+		<property name="money">0.00</property>
+		<property name="caseCount">0.0</property>
+		<property name="rate">0.####</property>
+		<property name="volumn">0.####</property>
+		<property name="weight">0.####</property>
+		<property name="point">0.00</property>
+		<property name="yyyyMM">yyyyMM</property>
+		<property name="yyyyMMdd">yyyyMMdd</property>
+		<property name="yMd">yyyy-MM-dd</property>
+		<property name="yMdHm">yyyy-MM-dd HH:mm</property>
+		<property name="yMdHms">yyyy-MM-dd HH:mm:ss</property>
+
+		<!-- calculation -->
+		<property name="ROUNDING_MODE">4<!-- BigDecimal.ROUND_HALF_UP--></property>
+		<property name="ROUNDING_UP">0<!--BigDecimal.ROUND_UP--></property>
+		<property name="ROUNDING_DOWN">1<!--BigDecimal.ROUND_DOWN--></property>
+		<property name="SCALE_QTY">3</property>
+		<property name="SCALE_PRICE">2</property>
+		<property name="SCALE_MONEY">2</property>
+		<property name="SCALE_CASECOUNT">1</property>
+		<property name="SCALE_RATE">4</property>
+		<property name="SCALE_VOLUMN">4</property>
+		<property name="SCALE_WEIGHT">4</property>
+		<property name="SCALE_POINT">2</property>
+
+		<!--  dd.validateFormValue -->
+		<property name="VALID_QTY">Decimal(3)</property>
+		<property name="VALID_PRICE">Decimal(2)</property>
+		<property name="VALID_MONEY">Decimal(2)</property>
+		<property name="VALID_CASECOUNT">Decimal(1)</property>
+		<property name="VALID_RATE">Decimal(4)</property>
+		<property name="VALID_VOLUMN">Decimal(4)</property>
+		<property name="VALID_WEIGHT">Decimal(4)</property>
+		<property name="VALID_INTEGER">Integer</property>
+		<property name="VALID_DATE">Date</property>
+		<property name="VALID_YMD">Date(yyyy-MM-dd)</property>
+		<property name="VALID_POINT">Decimal(2)</property>
+
+		<!--  multipart form max post size for images -->
+		<property name="imageSize">65536<!-- 0x10000--></property>
+
+		<property name="autoTruncate">false</property>
+
+	</properties>
+
+	<properties class="com.hd123.rumba.runtime.FormatSettings">
+		<!-- display hyperlink to design documents -->
+		<property name="displayDesign">true</property>
+
+		<!--  generate request script, for test script preparation -->
+		<property name="generateScript">false</property>
+	</properties>
+
+	<implementations>
+		<property name="com.hd123.rumba.qt.def.ICollateMgr">
+			com.hd123.rumba.qt.def.CollateMgr
+		</property>
+		<property name="com.hd123.rumba.request.IMainMenu">
+			com.hd123.rumba.request.MainMenu
+		</property>
+		<property name="com.hd123.rumba.domain.IDomainMgr">
+			com.hd123.rumba.domain.DomainMgr
+		</property>
+		<property name="com.hd123.rumba.organization.IOrganizationMgr">
+			com.hd123.rumba.organization.OrganizationMgr
+		</property>
+		<property name="com.hd123.rumba.user.IPermissionMgr">
+			com.hd123.rumba.user.PermissionMgr
+		</property>
+		<property name="com.hd123.rumba.user.IRoleMgr">
+			com.hd123.rumba.user.RoleMgr
+		</property>
+		<property name="com.hd123.rumba.user.IUserMgr">
+			com.hd123.rumba.user.UserMgr
+		</property>
+		<property name="com.hd123.rumba.catalog.ICatalogMgr">
+			com.hd123.rumba.catalog.CatalogMgr
+		</property>
+		<property name="com.hd123.rumba.qt.collate.ICollateMgr">
+			com.hd123.rumba.qt.collate.CollateMgr
+		</property>	
+		<property name="com.hd123.rumba.log.IActionLogMgr">
+			com.hd123.rumba.log.ActionLogMgr
+		</property>
+		<property name="com.hd123.rumba.log.IEntityLogMgr">
+			com.hd123.rumba.log.EntityLogMgr
+		</property>
+		<property name="com.hd123.rumba.log.IEntityChangeLogMgr">
+			com.hd123.rumba.log.EntityChangeLogMgr
+		</property>
+	</implementations>
+
+	<wsdd>
+		<deploy>/com/hd123/rumba/domain/DDomainMgr.wsdd</deploy>
+		<deploy>/com/hd123/rumba/organization/DOrganizationMgr.wsdd</deploy>
+		<deploy>/com/hd123/rumba/catalog/DCatalogMgr.wsdd</deploy>
+		<deploy>/com/hd123/rumba/sql/DQueryMgr.wsdd</deploy>
+	</wsdd>
+
+	<custom class="" />
+
+</configuration>
+
